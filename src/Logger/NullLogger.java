@@ -1,7 +1,8 @@
 package Logger;
 
-/**
- * Created by paytonrules on 3/8/15.
- */
-public class NullLogger {
+public class NullLogger implements Logger {
+    @Override
+    public void LogEmail(String email) {
+
+    }
 }
