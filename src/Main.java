@@ -15,6 +15,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -64,40 +67,44 @@ public class Main extends Application {
         gridPane.add(error, 1, 6);
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent e) {
                 String firstName = firstNameTextField.getText();
                 String lastName = lastNameTextField.getText();
                 String email = userTextField.getText();
 
-                if (firstName.isEmpty() ||
-                        !validEmail(email) ||
-                        lastName.isEmpty()) {
+                if (firstName.isEmpty() || !validEmail(email) || lastName.isEmpty()) {
                     error.setFill(Color.FIREBRICK);
                     error.setText("Invalid Data");
                 } else {
                     Connection connection = null;
 
                     try {
-                        Class.forName("org.postgresql.Driver");
-                        String url = "jdbc:postgresql://localhost/users";
-
-                        connection = DriverManager.getConnection(url, "username", "password");
-
-                        Statement stmt = connection.createStatement();
-
-                        String insert = "insert into users (email, first_name, last_name)" +
-                                " VALUES('" + email + "', '" + firstName + "', '" + lastName + "');";
-                        stmt.executeUpdate(insert);
+                        BufferedWriter out = null;
+                        try
+                        {
+                            FileWriter fstream = new FileWriter("userdata.csv", true);
+                            out = new BufferedWriter(fstream);
+                            out.write(String.format("\n%s, %s, %s", firstName, lastName, email));
+                        }
+                        catch (IOException ioe)
+                        {
+                            System.err.println("Error: " + ioe.getMessage());
+                        }
+                        finally
+                        {
+                            if(out != null) {
+                                out.close();
+                            }
+                        }
                     } catch (Exception e1) {
-
+                        e1.printStackTrace();
                     } finally {
                         try {
                             if (connection != null)
                                 connection.close();
                         } catch (SQLException se) {
-
+                            se.printStackTrace();
                         }
                     }
                 }
