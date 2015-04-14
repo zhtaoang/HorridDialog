@@ -73,40 +73,21 @@ public class Main extends Application {
                 String lastName = lastNameTextField.getText();
                 String email = userTextField.getText();
 
-                if (firstName.isEmpty() || !validEmail(email) || lastName.isEmpty()) {
-                    error.setFill(Color.FIREBRICK);
-                    error.setText("Invalid Data");
-                } else {
-                    Connection connection = null;
-
+                try {
+                    BufferedWriter out = null;
                     try {
-                        BufferedWriter out = null;
-                        try
-                        {
-                            FileWriter fstream = new FileWriter("userdata.csv", true);
-                            out = new BufferedWriter(fstream);
-                            out.write(String.format("\n%s, %s, %s", firstName, lastName, email));
-                        }
-                        catch (IOException ioe)
-                        {
-                            System.err.println("Error: " + ioe.getMessage());
-                        }
-                        finally
-                        {
-                            if(out != null) {
-                                out.close();
-                            }
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                        FileWriter fstream = new FileWriter("userdata.csv", true);
+                        out = new BufferedWriter(fstream);
+                        out.write(String.format("\n%s, %s, %s", firstName, lastName, email));
+                    } catch (IOException ioe) {
+                        System.err.println("Error: " + ioe.getMessage());
                     } finally {
-                        try {
-                            if (connection != null)
-                                connection.close();
-                        } catch (SQLException se) {
-                            se.printStackTrace();
+                        if (out != null) {
+                            out.close();
                         }
                     }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
         });
