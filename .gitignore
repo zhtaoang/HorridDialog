@@ -1,4 +1,7 @@
 *.class
 out/
 *.csv
+*.iml
+.gradle
+.idea
 
