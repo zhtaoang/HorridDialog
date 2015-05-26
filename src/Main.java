@@ -79,6 +79,9 @@ public class Main extends Application {
                         FileWriter fstream = new FileWriter("userdata.csv", true);
                         out = new BufferedWriter(fstream);
                         out.write(String.format("\n%s, %s, %s", firstName, lastName, email));
+
+                        // Set the error text
+                        error.setText("No Error");
                     } catch (IOException ioe) {
                         System.err.println("Error: " + ioe.getMessage());
                     } finally {
