@@ -99,9 +99,4 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    static protected boolean validEmail(String email) {
-        EmailValidator validator = new EmailValidator(email);
-        return validator.isValid();
-    }
 }
