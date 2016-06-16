@@ -52,8 +52,8 @@ public class MainTest {
   @Test
   public void ItTestsStuff() throws Exception {
     TestableMain main = new TestableMain();
-    TestButtonAdapter buttonAdapter = new TestButtonAdapter();
-    main.setButtonAdapter(buttonAdapter);
+
+    main.setButtonAdapter(new TestButtonAdapter());
 
     main.startWithStageAdapter(new TestStageAdapter());
   }

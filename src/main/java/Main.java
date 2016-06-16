@@ -1,3 +1,5 @@
+import Logger.EmailLogger;
+import Logger.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -16,7 +19,6 @@ import javafx.stage.Stage;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 
 interface StageAdapter {
 
@@ -103,13 +105,18 @@ public class Main extends Application {
                     BufferedWriter out = null;
                     try {
                         FileWriter fstream = new FileWriter("userdata.csv", true);
-                        out = new BufferedWriter(fstream);
-                        out.write(String.format("\n%s, %s, %s", firstName, lastName, email));
 
-                        // Set the error text
-                        error.setText("No Error");
-                    } catch (IOException ioe) {
-                        System.err.println("Error: " + ioe.getMessage());
+                        out = new BufferedWriter(fstream);
+                        if (EmailValidator.isValid(email) || firstName.isEmpty() || lastName.isEmpty()){
+                            error.setFill(Color.FIREBRICK);
+                            error.setText("Invalid Data");
+                            UserDataWriter.write("continue");
+                            throw new IllegalArgumentException(String.format("Email %s is not valid!", email));
+                        }
+                        out.write(String.format("\n%s, %s, %s", firstName, lastName, email));
+                    } catch (IllegalArgumentException iae) {
+                        Logger logger = new EmailLogger();
+                        logger.log(iae.getMessage());
                     } finally {
                         if (out != null) {
                             out.close();

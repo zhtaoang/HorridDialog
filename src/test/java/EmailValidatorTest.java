@@ -7,8 +7,7 @@ public class EmailValidatorTest {
 
     @Test
     public void ItValidatesALowerCaseEmail() {
-        EmailValidator validator = new EmailValidator("valid@email.com");
-        assertTrue(validator.isValid());
+        assertTrue(EmailValidator.isValid("valid@email.com"));
     }
 
     @Test
@@ -28,8 +27,7 @@ public class EmailValidatorTest {
         };
 
         for(String badEmail : badEmails) {
-            EmailValidator validator = new EmailValidator(badEmail);
-            assertFalse(validator.isValid());
+            assertFalse(EmailValidator.isValid(badEmail));
         }
     }
 
